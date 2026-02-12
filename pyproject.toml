@@ -1,7 +1,13 @@
 [project]
 name = "text2podcast"
 version = "0.1.0"
-description = "Add your description here"
+description = "Convert two-person scripts into podcast-style MP3s using ElevenLabs API"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = [
+    "elevenlabs>=2.35.0",
+    "nicegui>=3.7.1",
+    "pydub>=0.25.1",
+    "pywebview>=6.1",
+    "requests>=2.32.5",
+]

@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# App-specific
+*.dmg
+.text2podcast_settings.json
