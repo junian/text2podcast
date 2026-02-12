@@ -10,12 +10,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv sync
 ```
 
-The app uses soundfile for audio processing by default (no FFmpeg required).
-
-Optional: Install FFmpeg for pydub fallback support:
-```bash
-brew install ffmpeg
-```
+The app uses soundfile for audio processing - no FFmpeg required!
 
 ## 2. Run the App (Development)
 
@@ -98,4 +93,3 @@ If audio generation fails:
 - Check that voice IDs are valid
 - Ensure you have API credits available
 - Try Dry Run mode first to test the script
-- Check Settings for audio backend status (soundfile or pydub)

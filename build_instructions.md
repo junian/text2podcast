@@ -8,12 +8,7 @@ brew install create-dmg
 uv sync
 ```
 
-2. (Optional) Install FFmpeg for pydub fallback:
-```bash
-brew install ffmpeg
-```
-
-Note: FFmpeg is optional. The app uses soundfile by default which doesn't require FFmpeg.
+Note: FFmpeg is not required. The app uses soundfile for audio processing.
 
 ## Step 1: Create Standalone App with PyInstaller
 
@@ -33,15 +28,7 @@ uv run pyinstaller --name="Text2Podcast" \
   main.py
 ```
 
-## Step 2: Bundle FFmpeg (Optional)
-
-```bash
-# Only needed if you want pydub fallback support
-# The app works without FFmpeg using soundfile
-cp $(which ffmpeg) dist/Text2Podcast.app/Contents/MacOS/
-```
-
-## Step 3: Create DMG Installer
+## Step 2: Create DMG Installer
 
 ```bash
 # Create DMG
@@ -95,7 +82,7 @@ uv run python setup.py py2app
 ## Notes
 
 - The app will be in `dist/Text2Podcast.app`
-- FFmpeg must be bundled or the app will prompt users to install it
+- Uses soundfile for audio processing (no FFmpeg needed)
 - Settings are stored in user's home directory: `~/.text2podcast_settings.json`
 - Generated podcasts save to `~/Downloads/podcast_output.mp3`
 

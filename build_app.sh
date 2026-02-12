@@ -32,14 +32,6 @@ uv run pyinstaller --name="Text2Podcast" \
   --collect-all nicegui \
   main.py
 
-# Check if FFmpeg is available (optional, only needed for pydub fallback)
-if command -v ffmpeg &> /dev/null; then
-    echo "FFmpeg found - bundling for pydub fallback support..."
-    cp $(which ffmpeg) dist/Text2Podcast.app/Contents/MacOS/
-else
-    echo "Note: FFmpeg not found. App will use soundfile backend (FFmpeg not required)."
-fi
-
 echo ""
 echo "✓ Build complete!"
 echo "App location: dist/Text2Podcast.app"

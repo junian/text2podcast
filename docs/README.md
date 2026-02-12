@@ -18,18 +18,7 @@ Convert two-person scripts into podcast-style MP3s using ElevenLabs API.
 uv sync
 ```
 
-The app supports two audio processing backends:
-
-1. **soundfile** (recommended, no FFmpeg required)
-   - Automatically installed with dependencies
-   - Pure Python audio processing
-   - Works out of the box
-
-2. **pydub** (fallback, requires FFmpeg)
-   - Used if soundfile is not available
-   - Requires FFmpeg: `brew install ffmpeg`
-
-The app will automatically use the best available backend.
+The app uses soundfile for audio processing - no FFmpeg required!
 
 ## Running the App
 
