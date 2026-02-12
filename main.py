@@ -5,9 +5,23 @@ from pathlib import Path
 from typing import List, Tuple
 from nicegui import ui, app, native
 from elevenlabs.client import ElevenLabs
-from pydub import AudioSegment
 from multiprocessing import freeze_support
 import json
+import io
+
+# Try to import audio libraries
+try:
+    from pydub import AudioSegment
+    PYDUB_AVAILABLE = True
+except:
+    PYDUB_AVAILABLE = False
+
+try:
+    import soundfile as sf
+    import numpy as np
+    SOUNDFILE_AVAILABLE = True
+except:
+    SOUNDFILE_AVAILABLE = False
 
 # Settings file path
 SETTINGS_FILE = Path.home() / ".text2podcast_settings.json"
@@ -46,6 +60,76 @@ class ScriptParser:
         
         return lines
 
+class AudioProcessor:
+    """Audio processing without FFmpeg dependency"""
+    
+    @staticmethod
+    def stitch_audio_files_soundfile(audio_files: List[bytes]) -> bytes:
+        """Stitch audio files using soundfile (no FFmpeg needed)"""
+        if not SOUNDFILE_AVAILABLE:
+            raise RuntimeError("soundfile library not available")
+        
+        all_audio_data = []
+        sample_rate = None
+        
+        for audio_bytes in audio_files:
+            # Read audio from bytes
+            audio_data, sr = sf.read(io.BytesIO(audio_bytes))
+            
+            # Ensure consistent sample rate
+            if sample_rate is None:
+                sample_rate = sr
+            elif sr != sample_rate:
+                # Simple resampling (basic, but works without scipy)
+                ratio = sample_rate / sr
+                new_length = int(len(audio_data) * ratio)
+                audio_data = np.interp(
+                    np.linspace(0, len(audio_data), new_length),
+                    np.arange(len(audio_data)),
+                    audio_data
+                )
+            
+            # Normalize volume
+            if len(audio_data) > 0:
+                max_val = np.abs(audio_data).max()
+                if max_val > 0:
+                    audio_data = audio_data * (0.9 / max_val)
+            
+            all_audio_data.append(audio_data)
+        
+        # Concatenate all audio
+        combined = np.concatenate(all_audio_data)
+        
+        # Write to bytes
+        output = io.BytesIO()
+        sf.write(output, combined, sample_rate, format='MP3')
+        output.seek(0)
+        return output.read()
+    
+    @staticmethod
+    def stitch_audio_files_pydub(audio_files: List[bytes]) -> bytes:
+        """Stitch audio files using pydub (requires FFmpeg)"""
+        if not PYDUB_AVAILABLE:
+            raise RuntimeError("pydub library not available")
+        
+        audio_segments = []
+        
+        for audio_bytes in audio_files:
+            # Load audio from bytes
+            segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
+            # Normalize volume
+            segment = segment.normalize()
+            audio_segments.append(segment)
+        
+        # Stitch all segments
+        final_audio = sum(audio_segments)
+        
+        # Export to bytes
+        output = io.BytesIO()
+        final_audio.export(output, format='mp3')
+        output.seek(0)
+        return output.read()
+
 class PodcastGenerator:
     """Generate podcast audio using ElevenLabs"""
     
@@ -58,7 +142,7 @@ class PodcastGenerator:
     
     def generate_audio(self, lines: List[Tuple[str, str]], progress_callback=None) -> bytes:
         """Generate and stitch audio clips"""
-        audio_segments = []
+        audio_files = []
         total = len(lines)
         
         for i, (speaker, text) in enumerate(lines, 1):
@@ -78,35 +162,29 @@ class PodcastGenerator:
                 model_id="eleven_multilingual_v2"
             )
             
-            # Convert to AudioSegment
-            with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmp:
-                for chunk in audio:
-                    tmp.write(chunk)
-                tmp_path = tmp.name
+            # Collect audio bytes
+            audio_bytes = b""
+            for chunk in audio:
+                audio_bytes += chunk
             
-            segment = AudioSegment.from_mp3(tmp_path)
-            os.unlink(tmp_path)
-            
-            # Normalize volume
-            segment = segment.normalize()
-            audio_segments.append(segment)
+            audio_files.append(audio_bytes)
         
         if self.dry_run:
             return b""
         
-        # Stitch all segments
-        final_audio = sum(audio_segments)
-        
-        # Export to bytes
-        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmp:
-            final_audio.export(tmp.name, format='mp3')
-            tmp_path = tmp.name
-        
-        with open(tmp_path, 'rb') as f:
-            audio_bytes = f.read()
-        
-        os.unlink(tmp_path)
-        return audio_bytes
+        # Stitch audio using available method
+        try:
+            if SOUNDFILE_AVAILABLE:
+                return AudioProcessor.stitch_audio_files_soundfile(audio_files)
+            elif PYDUB_AVAILABLE:
+                return AudioProcessor.stitch_audio_files_pydub(audio_files)
+            else:
+                raise RuntimeError("No audio processing library available. Install soundfile or pydub.")
+        except Exception as e:
+            # Fallback: if soundfile fails, try pydub
+            if SOUNDFILE_AVAILABLE and PYDUB_AVAILABLE:
+                return AudioProcessor.stitch_audio_files_pydub(audio_files)
+            raise e
 
 class Settings:
     """Manage app settings"""
@@ -159,6 +237,15 @@ def main():
                 ui.notify('Settings saved', type='positive')
             
             ui.button('Save Settings', on_click=save_settings, icon='save').props('color=primary')
+            
+            # Audio backend status
+            ui.separator().classes('my-2')
+            if SOUNDFILE_AVAILABLE:
+                ui.label('Audio Backend: soundfile (FFmpeg not required)').classes('text-sm text-green-600')
+            elif PYDUB_AVAILABLE:
+                ui.label('Audio Backend: pydub (requires FFmpeg)').classes('text-sm text-orange-600')
+            else:
+                ui.label('Audio Backend: None available - install soundfile or pydub').classes('text-sm text-red-600')
         
         # Script input
         ui.label('Script Input').classes('text-xl font-bold mt-4 mb-2')
