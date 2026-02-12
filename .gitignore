@@ -12,3 +12,4 @@ wheels/
 # App-specific
 *.dmg
 .text2podcast_settings.json
+.env

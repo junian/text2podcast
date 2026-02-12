@@ -52,7 +52,25 @@ The app will open in a native window.
 
 # Create DMG installer
 ./create_dmg.sh
+
+# (Optional) Verify signatures
+./verify_signature.sh
 ```
+
+## 6. Sign and Notarize (For Distribution)
+
+If you want to distribute the app to others:
+
+```bash
+# 1. Set up credentials
+cp .env.example .env
+# Edit .env with your Apple Developer info
+
+# 2. Sign and notarize
+./sign_and_notarize.sh
+```
+
+See `SIGNING_GUIDE.md` for detailed setup instructions.
 
 The DMG will be ready to distribute!
 

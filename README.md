@@ -45,4 +45,31 @@ Settings are stored in `~/.text2podcast_settings.json`
 
 ## Building macOS App
 
-See `build_instructions.md` for packaging as a standalone .app and DMG installer.
+```bash
+# Build the .app bundle
+./build_app.sh
+
+# Create DMG installer
+./create_dmg.sh
+```
+
+## Code Signing and Notarization
+
+For distribution outside the Mac App Store, you need to sign and notarize your app:
+
+```bash
+# 1. Configure your credentials
+cp .env.example .env
+# Edit .env with your Apple Developer credentials
+
+# 2. Build, sign, and notarize
+./build_app.sh
+./sign_and_notarize.sh
+```
+
+See `SIGNING_GUIDE.md` for detailed instructions on:
+- Getting a Developer ID certificate
+- Creating app-specific passwords
+- Complete signing and notarization process
+
+The DMG will be ready to distribute!
