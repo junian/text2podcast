@@ -3,9 +3,10 @@ import re
 import tempfile
 from pathlib import Path
 from typing import List, Tuple
-from nicegui import ui, app
+from nicegui import ui, app, native
 from elevenlabs.client import ElevenLabs
 from pydub import AudioSegment
+from multiprocessing import freeze_support
 import json
 
 # Settings file path
@@ -262,7 +263,8 @@ def main():
                      on_click=lambda: generate_podcast(False), 
                      icon='mic').props('color=positive')
     
-    ui.run(native=True, window_size=(800, 900), title='Text to Podcast')
+    freeze_support()  # first statement in main guard
+    ui.run(native=True, port=native.find_open_port(), title='Text to Podcast', reload=False)
 
 if __name__ in {"__main__", "__mp_main__"}:
     main()
