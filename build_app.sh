@@ -33,13 +33,13 @@ uv run pyinstaller --name="Text2Podcast" \
   main.py
 
 # Check if FFmpeg is available
-if command -v ffmpeg &> /dev/null; then
-    echo "Bundling FFmpeg..."
-    cp $(which ffmpeg) dist/Text2Podcast.app/Contents/MacOS/
-else
-    echo "Warning: FFmpeg not found. Install with: brew install ffmpeg"
-    echo "The app will require users to install FFmpeg separately."
-fi
+# if command -v ffmpeg &> /dev/null; then
+#     echo "Bundling FFmpeg..."
+#     cp $(which ffmpeg) dist/Text2Podcast.app/Contents/MacOS/
+# else
+#     echo "Warning: FFmpeg not found. Install with: brew install ffmpeg"
+#     echo "The app will require users to install FFmpeg separately."
+# fi
 
 echo ""
 echo "✓ Build complete!"
