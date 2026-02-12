@@ -25,7 +25,7 @@ rm -rf build dist *.spec
 echo "Building app bundle..."
 uv run pyinstaller --name="Text2Podcast" \
   --windowed \
-  --onefile \
+  --onedir \
   --hidden-import=elevenlabs \
   --hidden-import=pydub \
   --hidden-import=nicegui \

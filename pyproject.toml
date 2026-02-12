@@ -8,6 +8,7 @@ dependencies = [
     "elevenlabs>=2.35.0",
     "nicegui>=3.7.1",
     "pydub>=0.25.1",
+    "pyinstaller>=6.18.0",
     "pywebview>=6.1",
     "requests>=2.32.5",
 ]
