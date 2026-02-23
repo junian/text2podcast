@@ -1,12 +1,12 @@
-Speaker A: Welcome to Tech Talk, the podcast where we explore the latest in technology and innovation.
-Speaker B: Thanks for having me! I'm excited to be here today.
-Speaker A: So let's dive right in. What's the most interesting technology trend you've been following lately?
-Speaker B: I've been really fascinated by the developments in AI-powered audio generation. The quality has improved dramatically.
-Speaker A: Absolutely! It's amazing how natural these voices sound now. What do you think are the main use cases?
-Speaker B: Well, podcasting is obviously one. But also audiobooks, accessibility tools, and even personalized voice assistants.
-Speaker A: That's a great point about accessibility. Technology that helps people is always the most rewarding.
-Speaker B: Couldn't agree more. And the barrier to entry keeps getting lower, which means more creators can participate.
-Speaker A: Before we wrap up, any final thoughts you'd like to share with our listeners?
-Speaker B: Just that we're living in an exciting time. The tools available to creators today would have seemed like science fiction just a few years ago.
-Speaker A: Well said! Thanks so much for joining us today.
-Speaker B: My pleasure! Thanks for having me.
+Host: Welcome to Tech Talk, the podcast where we explore the latest in technology and innovation.
+Guest: Thanks for having me! I'm excited to be here today.
+Host: So let's dive right in. What's the most interesting technology trend you've been following lately?
+Guest: I've been really fascinated by the developments in AI-powered audio generation. The quality has improved dramatically.
+Host: Absolutely! It's amazing how natural these voices sound now. What do you think are the main use cases?
+Guest: Well, podcasting is obviously one. But also audiobooks, accessibility tools, and even personalized voice assistants.
+Host: That's a great point about accessibility. Technology that helps people is always the most rewarding.
+Guest: Couldn't agree more. And the barrier to entry keeps getting lower, which means more creators can participate.
+Host: Before we wrap up, any final thoughts you'd like to share with our listeners?
+Guest: Just that we're living in an exciting time. The tools available to creators today would have seemed like science fiction just a few years ago.
+Host: Well said! Thanks so much for joining us today.
+Guest: My pleasure! Thanks for having me.

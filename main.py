@@ -28,8 +28,8 @@ class ScriptParser:
             if not line:
                 continue
             
-            # Match "Speaker A:" or "Speaker B:" format
-            match = re.match(r'^(Speaker [AB]):\s*(.+)$', line, re.IGNORECASE)
+            # Match "Host:" or "Guest:" format
+            match = re.match(r'^(Host|Guest):\s*(.+)$', line, re.IGNORECASE)
             if match:
                 speaker = match.group(1).upper()
                 content = match.group(2).strip()
@@ -38,7 +38,7 @@ class ScriptParser:
                 else:
                     errors.append(f"Line {i}: Empty content after speaker tag")
             else:
-                errors.append(f"Line {i}: Invalid format. Expected 'Speaker A:' or 'Speaker B:'")
+                errors.append(f"Line {i}: Invalid format. Expected 'Host:' or 'Guest:'")
         
         if errors:
             raise ValueError("\n".join(errors))
@@ -94,10 +94,10 @@ class AudioProcessor:
 class PodcastGenerator:
     """Generate podcast audio using ElevenLabs"""
     
-    def __init__(self, api_key: str, voice_a: str, voice_b: str, dry_run: bool = False):
+    def __init__(self, api_key: str, voice_host: str, voice_guest: str, dry_run: bool = False):
         self.api_key = api_key
-        self.voice_a = voice_a
-        self.voice_b = voice_b
+        self.voice_host = voice_host
+        self.voice_guest = voice_guest
         self.dry_run = dry_run
         self.client = None if dry_run else ElevenLabs(api_key=api_key)
     
@@ -114,7 +114,7 @@ class PodcastGenerator:
                 # Simulate processing
                 continue
             
-            voice_id = self.voice_a if speaker == "SPEAKER A" else self.voice_b
+            voice_id = self.voice_host if speaker == "HOST" else self.voice_guest
             
             # Generate audio using ElevenLabs
             audio = self.client.text_to_speech.convert(
@@ -146,8 +146,8 @@ class Settings:
                 return json.load(f)
         return {
             'api_key': '',
-            'voice_a': '',
-            'voice_b': ''
+            'voice_host': '',
+            'voice_guest': ''
         }
     
     @staticmethod
@@ -173,16 +173,16 @@ def main():
                 .classes('w-full').props('outlined')
             api_key_input.value = settings.get('api_key', '')
             
-            voice_a_input = ui.input('Voice ID for Speaker A').classes('w-full').props('outlined')
-            voice_a_input.value = settings.get('voice_a', '')
+            voice_host_input = ui.input('Voice ID for Host').classes('w-full').props('outlined')
+            voice_host_input.value = settings.get('voice_host', '')
             
-            voice_b_input = ui.input('Voice ID for Speaker B').classes('w-full').props('outlined')
-            voice_b_input.value = settings.get('voice_b', '')
+            voice_guest_input = ui.input('Voice ID for Guest').classes('w-full').props('outlined')
+            voice_guest_input.value = settings.get('voice_guest', '')
             
             def save_settings():
                 settings['api_key'] = api_key_input.value
-                settings['voice_a'] = voice_a_input.value
-                settings['voice_b'] = voice_b_input.value
+                settings['voice_host'] = voice_host_input.value
+                settings['voice_guest'] = voice_guest_input.value
                 Settings.save(settings)
                 ui.notify('Settings saved', type='positive')
             
@@ -190,7 +190,7 @@ def main():
         
         # Script input
         ui.label('Script Input').classes('text-xl font-bold mt-4 mb-2')
-        ui.label('Format: Each line must start with "Speaker A:" or "Speaker B:"').classes('text-sm text-gray-600 mb-2')
+        ui.label('Format: Each line must start with "Host:" or "Guest:"').classes('text-sm text-gray-600 mb-2')
         
         script_input = ui.textarea('Paste your script here...') \
             .classes('w-full').props('outlined rows=15')
@@ -247,7 +247,7 @@ def main():
                 ui.notify('Please validate script first', type='warning')
                 return
             
-            if not settings.get('api_key') or not settings.get('voice_a') or not settings.get('voice_b'):
+            if not settings.get('api_key') or not settings.get('voice_host') or not settings.get('voice_guest'):
                 ui.notify('Please configure API key and voice IDs in Settings', type='warning')
                 return
             
@@ -261,8 +261,8 @@ def main():
             try:
                 generator = PodcastGenerator(
                     settings['api_key'],
-                    settings['voice_a'],
-                    settings['voice_b'],
+                    settings['voice_host'],
+                    settings['voice_guest'],
                     dry_run=dry_run
                 )
                 

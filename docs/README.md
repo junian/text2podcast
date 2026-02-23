@@ -31,16 +31,16 @@ uv run python main.py
 
 Each line must follow this format:
 ```
-Speaker A: Hello, welcome to our podcast!
-Speaker B: Thanks for having me!
-Speaker A: Let's dive into today's topic.
+Host: Welcome to our podcast!
+Guest: Thanks for having me!
+Host: Let's dive into today's topic.
 ```
 
 ## Configuration
 
 1. Click "Settings" in the app
 2. Enter your ElevenLabs API key
-3. Enter Voice IDs for Speaker A and Speaker B
+3. Enter Voice IDs for Host and Guest
 4. Click "Save Settings"
 
 Settings are stored in `~/.text2podcast_settings.json`

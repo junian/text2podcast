@@ -24,7 +24,7 @@ The app will open in a native window.
 
 1. Click "Settings" in the app
 2. Enter your ElevenLabs API key (get one at https://elevenlabs.io)
-3. Enter Voice IDs for Speaker A and Speaker B
+3. Enter Voice IDs for Host and Guest
    - Find voice IDs in your ElevenLabs dashboard
 4. Click "Save Settings"
 
@@ -32,8 +32,8 @@ The app will open in a native window.
 
 1. Paste or upload a script in this format:
    ```
-   Speaker A: Welcome to the show!
-   Speaker B: Thanks for having me!
+   Host: Welcome to the show!
+   Guest: Thanks for having me!
    ```
 
 2. Click "Validate Script" to check formatting
@@ -78,7 +78,7 @@ The DMG will be ready to distribute!
 - Use Dry Run mode to validate your workflow before spending API credits
 - The app validates script format and shows clear error messages
 - Settings persist between sessions
-- Each line must start with "Speaker A:" or "Speaker B:"
+- Each line must start with "Host:" or "Guest:"
 - Empty lines are ignored
 
 ## Troubleshooting
