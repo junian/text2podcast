@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-DMG_FILE="Text2Podcast-Installer.dmg"
+DMG_FILE="dist/Text2Podcast.dmg"
 APP_PATH="dist/Text2Podcast.app"
 
 echo "=== Signature Verification ==="
@@ -70,4 +70,4 @@ echo "  1. Valid code signature (codesign)"
 echo "  2. Gatekeeper acceptance (spctl)"
 echo "  3. Notarization ticket (stapler)"
 echo ""
-echo "Run ./sign_and_notarize.sh to complete all steps"
+
