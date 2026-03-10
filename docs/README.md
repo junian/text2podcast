@@ -30,6 +30,7 @@ uv run python main.py
 ## Script Format
 
 Each line must follow this format:
+
 ```
 Host: Welcome to our podcast!
 Guest: Thanks for having me!
